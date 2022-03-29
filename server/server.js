@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 // import ApolloServer
 const { ApolloServer } = require('apollo-server-express');
 const { authMiddleware } = require('./utils/auth');
@@ -31,11 +32,23 @@ const startServer = async () => {
   console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
 };
 
-// Initialize the Apolloe server
+// Initialize the Apollo server
 startServer();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// Serve up static assets
+// First, we check to see if the Node environment is in production.  
+if (process.env.NODE_ENV === 'production') {
+  // If it is, we instruct the Express.js server to serve any files in the React application's build directory in the client folder.
+  app.use(express.static(path.join(__dirname, 'client/build')));
+};
+
+// The next set of functionality we created was a wildcard GET route for the server. In other words, if we make a GET request to any location on the server that doesn't have an explicit route defined, respond with the production-ready React front-end code
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 
 db.once('open', () => {
   app.listen(PORT, () => {

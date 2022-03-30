@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/Sly-Ry/deep-thoughts/issues"
   },
-  "homepage": "https://github.com/Sly-Ry/deep-thoughts#readme"
+  "homepage": "https://github.com/Sly-Ry/deep-thoughts#readme",
+  "dependencies": {
+    "react-router-dom": "5"
+  }
 }

@@ -18,7 +18,7 @@ const startServer = async () => {
     typeDefs,
     resolvers,
     // This ensures that every request performs an authentication check, and the updated request object will be passed to the resolvers as the context.
-    context: authMiddleware
+    context: authMiddleware,
   });
 
   // Start the Apollo server
@@ -42,7 +42,7 @@ app.use(express.json());
 // First, we check to see if the Node environment is in production.  
 if (process.env.NODE_ENV === 'production') {
   // If it is, we instruct the Express.js server to serve any files in the React application's build directory in the client folder.
-  app.use(express.static(path.join(__dirname, 'client/build')));
+  app.use(express.static(path.join(__dirname, '../client/build')));
 };
 
 // The next set of functionality we created was a wildcard GET route for the server. In other words, if we make a GET request to any location on the server that doesn't have an explicit route defined, respond with the production-ready React front-end code

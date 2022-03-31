@@ -65,3 +65,12 @@ The faker (Links to an external site.) npm package allows you to generate massiv
 The nodemon (Links to an external site.) package simplifies your development environment by automatically restarting your Node.js applications when file changes in the directory are detected.
 
 Optional chaining negates the need to check if an object even exists before accessing its properties.
+
+With Express on the back end, you can define a catch-all route after your other routes with the following code:
+
+    ```app.get('*', (req, res) => {
+    res.status(404).sendFile(path.join(__dirname, './public/404.html'));
+    });
+    ```
+
+    - This would mean any route that hasn't been defined would be treated as a 404 and respond with your custom 404.html file.

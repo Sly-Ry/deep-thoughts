@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
+import Auth from '../utils/auth';
 
 const Login = (props) => {
   const [formState, setFormState] = useState({ email: '', password: '' });
@@ -21,12 +22,12 @@ const Login = (props) => {
     event.preventDefault();
 
     try {
-      const { data } =await login({
+      const { data } = await login({
         // Remember that the ... in this context is being used as the spread operator. This means that we are setting the variables field in our mutation to be an object with key/value pairs that match directly to what our formState object looks like.
         variables: { ...formState }
       });
 
-      console.log(data);
+      Auth.login(data.login.token);
     }
     catch (e) {
       console.error(e);

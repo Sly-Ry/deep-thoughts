@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/client'
 import { QUERY_THOUGHTS, QUERY_ME_BASIC } from '../utils/queries';
 import Auth from '../utils/auth';
 
+import ThoughtForm from '../components/ThoughtForm';
 import ThoughtList from '../components/ThoughtList';
 import FriendList from '../components/FriendList';
 
@@ -27,6 +28,12 @@ const Home = () => {
   return (
     <main>
       <div className='flex-row justify-space-between'>
+        {/* a short-circuit expression to conditionally render ThoughtForm */}
+        {loggedIn && (
+          <div className="col-12 mb-3">
+            <ThoughtForm />
+          </div>
+        )}
         {/* We're conditionally defining the layout for this <div></div> */} 
         {/* If the user isn't logged in, it'll span the full width of the row. But if you the user is logged in, it'll only span eight columns, leaving space for a four-column <div> on the righthand side. */}
         <div className={`col-12 mb-3 ${loggedIn && 'col-lg-8'}`}>

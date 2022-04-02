@@ -3,6 +3,7 @@ import React from 'react';
 // Think of it like how we've used location.replace() in the past, but it leverages React Router's ability to not reload the browser! 
 import { Redirect, useParams } from 'react-router-dom';
 
+import ThoughtForm from '../components/ThoughtForm';
 import ThoughtList from '../components/ThoughtList';
 import FriendList from '../components/FriendList';
 
@@ -81,6 +82,8 @@ const Profile = (props) => {
           />
         </div>
       </div>
+
+      <div className="mb-3">{!userParam && <ThoughtForm />}</div>
     </div>
   );
 };

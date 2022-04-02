@@ -6,8 +6,11 @@ import { Redirect, useParams } from 'react-router-dom';
 import ThoughtList from '../components/ThoughtList';
 import FriendList from '../components/FriendList';
 
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_USER, QUERY_ME } from '../utils/queries';
+
+import { ADD_FRIEND } from '../utils/mutations';
+
 import Auth from '../utils/auth';
 
 const Profile = (props) => {
@@ -18,6 +21,8 @@ const Profile = (props) => {
   const { loading, data } = useQuery(userParam ? QUERY_USER: QUERY_ME, {
     variables: { username: userParam }
   });
+
+  const [addFriend] = useMutation(ADD_FRIEND);
 
   // Handles each type of response by changing it to look like the following code
   const user = data?.me || data?.user || {};
@@ -40,13 +45,28 @@ const Profile = (props) => {
     );
   };
 
+  const handleClick = async () => {
+    try {
+      await addFriend({
+        variables: { id: user._id }
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div>
       <div className="flex-row mb-3">
         <h2 className="bg-dark text-secondary p-3 display-inline-block">
-          {/* If userParam doesn't exist, we'll get a message saying "Viewing your profile." Otherwise, it will display the username of the other user on their profile. */}
           Viewing {userParam ? `${user.username}'s` : 'your'} profile.
         </h2>
+        {/* With these changes, the userParam variable is only defined when the route includes a username (e.g., /profile/Marisa86). Thus, the button won't display when the route is simply /profile. */}
+        {userParam && (
+          <button className="btn ml-auto" onClick={handleClick}>
+            Add Friend
+          </button>
+        )}
       </div>
 
       <div className="flex-row justify-space-between mb-3">
@@ -66,3 +86,7 @@ const Profile = (props) => {
 };
 
 export default Profile;
+
+// As you befriend more users and route from Profile back to Home, notice that the homepage instantly reflects the change. There's no need to re-request any information from the server, because the Apollo Client caches query results and updates the cache whenever mutations are made. Paired with the useQuery Hook, these changes automatically re-render your components.
+
+// In this case, the addFriend() mutation returns an updated user object whose ID matches the me object already stored in cache. When the cache is updated, the useQuery(QUERY_ME_BASIC) Hook on the homepage causes a re-render.
